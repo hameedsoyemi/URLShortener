@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hameed's URL Shortner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+</head>
+<body class="group">
+  <div>
+    <form class="center" id="myForm">
+      <p>Place your URL here:</p>
+      <input type="text" id="longUrl" placeholder="Enter the URL"><br>
+      
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+
+    <br>
+    <div class="center"> 
+      <p>Your Shorturl is: </p>
+      <p id="shortUrl">
+  
+      </p>
+    </div>
+    </div>
+
+
+</body>
+</html>
+
+<script>
+
+document.getElementById('myForm').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent the form from submitting normally
+    var data = document.getElementById("longUrl").value
+
+    var jsonData = {url: data};
+
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/shorten', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonData)
+        })
+
+      console.log('this is the response ' + response)
+
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      console.log(response)
+
+      var paragraph = document.getElementById('shortUrl');
+
+      var val = await response.json();
+
+      // Change the text content
+      paragraph.textContent = val.data
+      return true
+
+      
+    } catch (e) {
+
+      console.log('this is the data error ' + e)
+      // var paragraph = document.getElementById('shortUrl');
+      // // Change the text content
+      // paragraph.textContent = data; 
+
+
+      }
+  })
+
+</script>
+
+<style>
+body{
+  background-color: #1B1725;
+  height:100vh;
+  font-family: 'Open Sans', sans-serif;
+}
+.center {
+  color: white;
+  margin: auto;
+  width: 50%;
+  border: 1px solid #D0BCD5;
+  border-radius: 4px;
+  padding: 10px;
+}
+</style>
